@@ -16,12 +16,19 @@ class UserAddressesController extends Controller
     ]);
   }
 
+  /**
+   * 新增收货地址
+   */
   public function create()
   {
     return view('user_addresses.create_and_edit', ['address' => new UserAddress()]);
   }
 
-  // 新增收货地址
+  /**
+   * 新增收货地址
+   *
+   * @param  UserAddressRequest  $request
+   */
   public function store(UserAddressRequest $request)
   {
     // 关联写入
@@ -38,11 +45,13 @@ class UserAddressesController extends Controller
     return redirect()->route('user_addresses.index');
   }
 
+  // 编辑表单
   public function edit(UserAddress $user_address)
   {
     return view('user_addresses.create_and_edit', ['address' => $user_address]);
   }
 
+  // 修改收货地址
   public function update(UserAddress $user_address, UserAddressRequest $request)
   {
     $user_address->update($request->only([
@@ -56,5 +65,12 @@ class UserAddressesController extends Controller
     ]));
 
     return redirect()->route('user_addresses.index');
+  }
+
+  public function destroy(UserAddress $user_address)
+  {
+    $user_address->delete();
+
+    return [];
   }
 }
