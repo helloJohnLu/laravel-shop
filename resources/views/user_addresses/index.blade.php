@@ -2,16 +2,16 @@
 @section('title', '收货地址列表')
 
 @section('content')
-  <div class="row">
-    <div class="col-md-10 offset-md-1">
-      <div class="card panel-default">
-        <div class="card-header">
-          <span>收货地址列表</span>
-          <a href="{{ route('user_addresses.create') }}" class="float-end text-decoration-none">新增收货地址</a>
-        </div>
-        <div class="card-body">
-          <table class="table table-bordered table-striped">
-            <thead>
+<div class="row">
+  <div class="col-md-10 offset-md-1">
+    <div class="card panel-default">
+      <div class="card-header">
+        <span>收货地址列表</span>
+        <a href="{{ route('user_addresses.create') }}" class="float-end text-decoration-none">新增收货地址</a>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered table-striped">
+          <thead>
             <tr>
               <th>收货人</th>
               <th>地址</th>
@@ -19,31 +19,33 @@
               <th>电话</th>
               <th>操作</th>
             </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
             @foreach ($addresses as $address)
-              <tr>
-                <td> {{ $address->contact_name }} </td>
-                <td> {{ $address->full_address }} </td>
-                <td> {{ $address->zip }} </td>
-                <td> {{ $address->contact_phone }} </td>
-                <td>
-                  <a href="{{ route('user_addresses.edit', ['user_address' => $address->id]) }}" class="btn btn-sm btn-primary">修改</a>
-                  <button class="btn btn-sm btn-danger btn-del-address" type="button" data-id="{{ $address->id }}">删除</button>
-                </td>
-              </tr>
+            <tr>
+              <td> {{ $address->contact_name }} </td>
+              <td> {{ $address->full_address }} </td>
+              <td> {{ $address->zip }} </td>
+              <td> {{ $address->contact_phone }} </td>
+              <td>
+                <a href="{{ route('user_addresses.edit', ['user_address' => $address->id]) }}"
+                  class="btn btn-sm btn-primary">修改</a>
+                <button class="btn btn-sm btn-danger btn-del-address" type="button"
+                  data-id="{{ $address->id }}">删除</button>
+              </td>
+            </tr>
             @endforeach
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+</div>
 @endsection
 
 @section('scriptsAfterJs')
-  <script>
-    $(document).ready(function () {
+<script>
+  $(document).ready(function () {
       // 删除按钮点击事件
       $('.btn-del-address').click(function () {
         // 获取按钮上 data-id 属性的值，也就是地址 ID
@@ -69,5 +71,5 @@
         });
       });
     });
-  </script>
+</script>
 @endsection
