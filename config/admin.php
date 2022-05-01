@@ -210,7 +210,7 @@ return [
   */
   'operation_log'             => [
 
-    'enable'          => true,
+    'enable'          => false,
 
     /*
      * Only logging allowed methods in the list
@@ -402,31 +402,31 @@ return [
         'modules' => [
           'syntax'  => true,
           'toolbar' =>
-            [
-              ['size' => []],
-              ['header' => []],
-              'bold',
-              'italic',
-              'underline',
-              'strike',
-              ['script' => 'super'],
-              ['script' => 'sub'],
-              ['color' => []],
-              ['background' => []],
-              'blockquote',
-              'code-block',
-              ['list' => 'ordered'],
-              ['list' => 'bullet'],
-              ['indent' => '-1'],
-              ['indent' => '+1'],
-              'direction',
-              ['align' => []],
-              'link',
-              'image',
-              'video',
-              'formula',
-              'clean'
-            ],
+          [
+            ['size' => []],
+            ['header' => []],
+            'bold',
+            'italic',
+            'underline',
+            'strike',
+            ['script' => 'super'],
+            ['script' => 'sub'],
+            ['color' => []],
+            ['background' => []],
+            'blockquote',
+            'code-block',
+            ['list' => 'ordered'],
+            ['list' => 'bullet'],
+            ['indent' => '-1'],
+            ['indent' => '+1'],
+            'direction',
+            ['align' => []],
+            'link',
+            'image',
+            'video',
+            'formula',
+            'clean'
+          ],
         ],
         'theme'   => 'snow',
         'height'  => '200px',
