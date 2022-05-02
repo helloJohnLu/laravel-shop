@@ -58,6 +58,60 @@ class ProductsController extends Controller
       throw new InvalidRequestException('商品未上架');
     }
 
-    return view('products.show', compact('product'));
+    $favored = false;
+    // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
+    if ($user = $request->user()) {
+      // 从当前用户已收藏的商品中搜索 id 为当前商品 id 的商品
+      // boolval() 函数用于把值转为布尔值
+      $favored = boolval($user->favoriteProducts()->find($product->id));
+    }
+
+    return view('products.show', compact(['product', 'favored']));
+  }
+
+  /**
+   * 收藏商品
+   *
+   * @param  Product  $product
+   * @param  Request  $request
+   * @return array|void
+   */
+  public function favor(Product $product, Request $request)
+  {
+    $user = $request->user();
+    if ($user->favoriteProducts()->find($product->id)) {
+      return;
+    }
+
+    $user->favoriteProducts()->attach($product->id);
+
+    return [];
+  }
+
+  /**
+   * 取消收藏
+   *
+   * @param  Product  $product
+   * @param  Request  $request
+   * @return array
+   */
+  public function disfavor(Product $product, Request $request)
+  {
+    $user = $request->user();
+    $user->favoriteProducts()->detach($product->id);
+
+    return [];
+  }
+
+  /**
+   * 收藏商品列表
+   *
+   * @param  Request  $request
+   */
+  public function favorites(Request $request)
+  {
+    $products = $request->user()->favoriteProducts()->paginate();
+
+    return view('products.favorites', compact('products'));
   }
 }
