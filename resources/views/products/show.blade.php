@@ -29,7 +29,6 @@
                       data-price="{{ $sku->price }}"
                       data-stock="{{ $sku->stock }}"
                       data-toggle="tooltip"
-
                       title="{{ $sku->description }}"
                       data-placement="bottom">
                       <input type="radio" name="skus" autocomplete="off" value="{{ $sku->id }}"> {{ $sku->title }}
@@ -81,40 +80,79 @@
         $('.product-info .price span').text($(this).data('price'));
         $('.product-info .stock').text('库存：' + $(this).data('stock') + '件');
       });
-    });
 
-    // 监听收藏按钮的点击事件
-    $('.btn-favor').click(function () {
-      // 发起一个 post ajax 请求，请求 url 通过后端的 route() 函数生成。
-      axios.post('{{ route('products.favor', ['product' => $product->id]) }}')
-        .then(function () { // 请求成功会执行这个回调
-          swal('操作成功', '', 'success')
-            .then(function () {
-              location.reload();
-            })
-        }, function (error) { // 请求失败会执行这个回调
-          // 如果返回码是 401 代表没登录
-          if (error.response && error.response.status === 401) {
-            swal('请先登录', '', 'error');
-          } else if (error.response && (error.response.data.msg || error.response.data.message)) {
-            // 其他有 msg 或者 message 字段的情况，将 msg 提示给用户
-            swal(error.response.data.msg ? error.response.data.msg : error.response.data.message, '', 'error');
-          } else {
-            // 其他情况应该是系统挂了
-            swal('系统错误', '', 'error');
-          }
-        });
-    });
+      // 监听收藏按钮的点击事件
+      $('.btn-favor').click(function () {
+        // 发起一个 post ajax 请求，请求 url 通过后端的 route() 函数生成。
+        axios.post('{{ route('products.favor', ['product' => $product->id]) }}')
+          .then(function () { // 请求成功会执行这个回调
+            swal('操作成功', '', 'success')
+              .then(function () {
+                location.reload();
+              })
+          }, function (error) { // 请求失败会执行这个回调
+            // 如果返回码是 401 代表没登录
+            if (error.response && error.response.status === 401) {
+              swal('请先登录', '', 'error');
+            } else if (error.response && (error.response.data.msg || error.response.data.message)) {
+              // 其他有 msg 或者 message 字段的情况，将 msg 提示给用户
+              swal(error.response.data.msg ? error.response.data.msg : error.response.data.message, '', 'error');
+            } else {
+              // 其他情况应该是系统挂了
+              swal('系统错误', '', 'error');
+            }
+          });
+      });
 
-    // 取消收藏
-    $('.btn-disfavor').click(function () {
-      axios.delete('{{ route('products.disfavor', ['product'=>$product->id]) }}')
-        .then(function () {
-          swal('操作成功', '', 'success')
-            .then(function () {
-              location.reload();
-            })
-        })
+      // 取消收藏
+      $('.btn-disfavor').click(function () {
+        axios.delete('{{ route('products.disfavor', ['product'=>$product->id]) }}')
+          .then(function () {
+            swal('操作成功', '', 'success')
+              .then(function () {
+                location.reload();
+              })
+          })
+      });
+
+      // 加入购物车按钮点击事件
+      $('.btn-add-to-cart').click(function () {
+
+        // 请求加入购物车接口
+        axios.post('{{ route('cart.add') }}', {
+          sku_id: $('.sku-btn input[name=skus]:checked').val(),
+          amount: $('.cart_amount input').val(),
+        }).then(
+          // 请求成功执行此回调
+          function () {
+            swal('加入购物车成功', '', 'success');
+          },
+          // 请求失败执行此回调
+          function (error) {
+            if (error.response.status === 401) {
+
+              // http 状态码为 401 代表用户未登陆
+              swal('请先登录', '', 'error');
+
+            } else if (error.response.status === 422) {
+
+              // http 状态码为 422 代表用户输入校验失败
+              var html = '<div>';
+              _.each(error.response.data.errors, function (errors) {
+                _.each(errors, function (error) {
+                  html += error + '<br>';
+                })
+              });
+              html += '</div>';
+              swal({content: $(html)[0], icon: 'error'})
+            } else {
+
+              // 其他情况应该是系统挂了
+              swal('系统错误', '', 'error');
+            }
+          })
+      });
+
     });
   </script>
 @endsection

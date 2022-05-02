@@ -64,4 +64,12 @@ class User extends Authenticatable implements MustVerifyEmail
                 ->withTimestamps()  //  代表中间表带有时间戳字段
                 ->orderBy('user_favorite_products.created_at', 'desc');
   }
+
+  /**
+   * 购物车商品 关联
+   */
+  public function cartItems()
+  {
+    return $this->hasMany(CartItem::class);
+  }
 }
