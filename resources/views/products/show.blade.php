@@ -125,7 +125,9 @@
         }).then(
           // 请求成功执行此回调
           function () {
-            swal('加入购物车成功', '', 'success');
+            swal('加入购物车成功', '', 'success').then(function () {
+              location.href = '{{ route('cart.index') }}';
+            });
           },
           // 请求失败执行此回调
           function (error) {
